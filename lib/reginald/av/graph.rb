@@ -1,14 +1,10 @@
 module Reginald
   module AV
     class Graph
-      def self.create(source, sink)
+      attr_reader :pins
 
-      end
-
-      attr_reader :devices
-
-      def initialize(devices)
-        @devices = devices
+      def initialize(pins)
+        @pins = pins
       end
     end
   end

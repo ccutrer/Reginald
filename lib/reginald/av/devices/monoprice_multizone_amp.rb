@@ -16,7 +16,7 @@ module Reginald::AV
         end
 
         (@stack_size * 6).times do
-          @output_pins << Pin.new(self)
+          @output_pins << OutputPin.new(self)
         end
       end
     end

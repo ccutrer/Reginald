@@ -35,6 +35,26 @@ module Reginald
           end
         end
       end
+
+      def build_graph(source_device, sink_device)
+        source_pin = source_device.output_pins.first
+        sink_pin = sink_device.input_pins.first
+        pins = find_path(source_pin, sink_pin)
+        return nil unless pins
+        Graph.new(pins)
+      end
+
+      private
+
+      def find_path(source_pin, sink_pin)
+        sink_pin.owner.input_pins.each do |input|
+          next unless input.connection
+          return [source_pin, input] if input.connection == source_pin
+          result = find_path(source_pin, input.connection)
+          return result + [input.connection, input] if result
+        end
+        nil
+      end
     end
   end
 end
