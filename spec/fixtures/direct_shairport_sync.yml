@@ -1,0 +1,5 @@
+devices:
+  - type: shairport_sync
+    output: Kitchen
+  - type: generic_speaker
+    name: Kitchen
