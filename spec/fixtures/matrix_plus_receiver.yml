@@ -3,6 +3,10 @@ devices:
     output:
       device: monoprice_multizone_amp1
       input: 2
+  - type: shairport_sync
+    output:
+      device: monoprice_multizone_amp1
+      input: 3
   - type: monoprice_multizone_amp
     output:
       - pioneer_receiver1

@@ -1,6 +1,13 @@
 module Reginald
   module AV
-    Pin = Struct.new(:owner, :name, :connection) do
+    class Pin
+      attr_accessor :owner, :name, :connection, :graphs
+
+      def initialize(owner, name = nil)
+        @owner, @name = owner, name
+        @graphs = []
+      end
+
       def connect(other_pin)
         raise PinInUse if connection || other_pin.connection
 

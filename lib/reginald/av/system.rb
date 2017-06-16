@@ -41,7 +41,7 @@ module Reginald
         sink_pin = sink_device.input_pins.first
         pins = find_path(source_pin, sink_pin)
         return nil unless pins
-        Graph.new(pins)
+        Graph.new(self, pins)
       end
 
       private
