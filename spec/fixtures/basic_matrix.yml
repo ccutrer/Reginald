@@ -1,0 +1,16 @@
+devices:
+  - type: shairport_sync
+    output:
+      device: monoprice_multizone_amp1
+      input: 2
+  - type: monoprice_multizone_amp
+    output:
+      - Kitchen
+      - Bedroom
+      - Deck
+  - type: generic_speaker
+    name: Kitchen
+  - type: generic_speaker
+    name: Bedroom
+  - type: generic_speaker
+    name: Deck

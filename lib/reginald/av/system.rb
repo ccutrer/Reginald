@@ -1,4 +1,5 @@
 require 'active_support'
+require 'active_support/core_ext/array/wrap'
 
 module Reginald
   module AV
@@ -22,12 +23,13 @@ module Reginald
         end
 
         devices.each_value do |device|
-          Array(device.config['output']).each_with_index do |output, i|
+          Array.wrap(device.config['output']).each_with_index do |output, i|
             if output.is_a?(Hash)
               connected_device_pin = output['input']
               output = output['device']
             end
             connected_device = devices[output]
+            raise UnknownDevice, "Could not find device #{output} supposedly connected to #{device.name}" unless connected_device
             connected_pin = connected_device.find_input_pin(connected_device_pin || 1)
             device.output_pins[i].connect(connected_pin)
           end
