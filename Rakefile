@@ -1,8 +1,5 @@
-require 'rubygems'
-require 'bundler'
-Bundler::GemHelper.install_tasks
+require_relative 'config/application'
 
-require 'rspec/core/rake_task'
-RSpec::Core::RakeTask.new
+Rails.application.load_tasks
 
 task :default => :spec

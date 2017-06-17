@@ -6,6 +6,19 @@ module Reginald
     class System
       attr_reader :devices, :graphs
 
+      class << self
+        def assign_instance(instance)
+          @instance = instance
+          @mutex = Mutex.new
+        end
+
+        def with_singleton
+          @mutex.synchronize do
+            yield(@instance)
+          end
+        end
+      end
+
       def initialize(config)
         @devices = {}
         @graphs = []

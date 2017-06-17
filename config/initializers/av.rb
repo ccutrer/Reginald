@@ -1,0 +1,1 @@
+Reginald::AV::System.assign_instance(Reginald::AV::System.new(YAML.load_file("config/av.yml")))

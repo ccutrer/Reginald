@@ -1,3 +1,6 @@
 /.byebug_history
 /Gemfile.lock
+/config/av.yml
+/log/*
 /reginald-*.gem
+/tmp/restart.txt
