@@ -13,4 +13,5 @@ class ApplicationController < ActionController::Base
   def system
     @system
   end
+  helper_method :system
 end

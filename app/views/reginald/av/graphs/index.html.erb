@@ -1,0 +1,18 @@
+<% if flash[:error] %>
+    <h2>Error: <%= flash[:error] %></h2>
+<% end %>
+
+<ul>
+  <% graphs.each do |graph| %>
+    <li><%= graph.pins.first.owner.name %> is playing on <%= graph.pins.last.owner.name %>. <%= link_to "Stop", av_graph_path(graph.pins.last.owner.name), method: :delete %></li>
+  <% end %>
+</ul>
+<%= form_tag(:av_graphs, method: :post) do %>
+  <%= label_tag(:source, "Source:") %>
+  <%= select_tag(:source, options_for_select(system.visible_sources.map(&:name))) %>
+  <%= label_tag(:sink, "Sink:") %>
+  <%= select_tag(:sink, options_for_select(system.sinks.map(&:name))) %>
+  <%= check_box_tag(:interrupt) %>
+  <%= label_tag(:interrupt, "Interrupt Active Graphs") %>
+  <%= submit_tag("Start") %>
+<% end %>

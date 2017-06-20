@@ -36,7 +36,15 @@ module Reginald
           output_pins[index_or_name - 1]
         end
       end
+    end
 
+    class Source < Device
+      def hidden?
+        false
+      end
+    end
+
+    class Sink < Device
     end
   end
 end

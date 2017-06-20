@@ -57,6 +57,18 @@ module Reginald
         Graph.new(self, pins)
       end
 
+      def sources
+        devices.values.select { |d| d.is_a?(Source) }
+      end
+
+      def visible_sources
+        devices.values.select { |d| d.is_a?(Source) && !d.hidden? }
+      end
+
+      def sinks
+        devices.values.select { |d| d.is_a?(Sink) }
+      end
+
       private
 
       def find_path(source_pin, sink_pin)

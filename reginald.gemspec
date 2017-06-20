@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency "activesupport", "~> 5.1"
   s.add_dependency "railties", "~> 5.1"
   s.add_dependency "puma", "~> 3.7"
+  s.add_dependency "sprockets-rails", "~> 3.2"
 
   s.add_development_dependency "byebug", "~> 9"
   s.add_development_dependency "listen", "~> 3.1"
