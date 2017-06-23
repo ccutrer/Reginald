@@ -5,6 +5,7 @@ require 'yaml'
 module Reginald::AV
   describe Graph do
     let(:system) { System.new(YAML.load(fixture("matrix_plus_receiver.yml"))) }
+    let(:virtual_matrix) { System.new(YAML.load(fixture("virtual_matrix.yml"))) }
 
     describe "#start" do
       it "changes internal inputs" do
@@ -28,6 +29,18 @@ module Reginald::AV
         graph1.start
         graph2 = system.build_graph(system.devices['shairport_sync2'], system.devices['Living Room'])
         expect { graph2.start }.to raise_error(PinInUse)
+      end
+
+      it "chooses an available path" do
+        system = virtual_matrix
+        graph1 = system.build_graph(system.devices['shairport_sync_kitchen'], system.devices['Kitchen'])
+        graph2 = system.build_graph(system.devices['shairport_sync_bedroom'], system.devices['Bedroom'])
+        expect(graph1.possible_paths.length).to eq 2
+        expect(graph1.possible_paths.length).to eq 2
+        graph1.start
+        expect(graph1.active_path).to eq graph1.possible_paths[0]
+        graph2.start
+        expect(graph2.active_path).to eq graph2.possible_paths[1]
       end
     end
   end

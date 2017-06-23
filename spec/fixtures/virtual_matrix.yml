@@ -1,0 +1,34 @@
+devices:
+  - type: shairport_sync
+    name: shairport_sync_kitchen
+    output:
+      device: virtual_matrix1
+    sinks:
+      - Kitchen
+  - type: shairport_sync
+    name: shairport_sync_bedroom
+    output:
+      device: virtual_matrix1
+    sinks:
+      - Bedroom
+  - type: shairport_sync
+    name: shairport_sync_party_mode
+    output:
+      device: virtual_matrix1
+    sinks:
+      - Kitchen
+      - Bedroom
+  - type: virtual_matrix
+    output:
+      - device: monoprice_multizone_amp1
+        input: 1
+      - device: monoprice_multizone_amp1
+        input: 2
+  - type: monoprice_multizone_amp
+    output:
+      - device: Kitchen
+      - device: Bedroom
+  - type: generic_speaker
+    name: Kitchen
+  - type: generic_speaker
+    name: Bedroom

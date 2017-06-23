@@ -37,13 +37,12 @@ module Reginald
 
         devices.each_value do |device|
           Array.wrap(device.config['output']).each_with_index do |output, i|
-            if output.is_a?(Hash)
-              connected_device_pin = output['input']
-              output = output['device']
+            unless output.is_a?(Hash)
+              output = { 'device' => output }
             end
-            connected_device = devices[output]
-            raise UnknownDevice, "Could not find device #{output} supposedly connected to #{device.name}" unless connected_device
-            connected_pin = connected_device.find_input_pin(connected_device_pin || 1)
+            connected_device = devices[output['device']]
+            raise UnknownDevice, "Could not find device #{output['device']} supposedly connected to #{device.name}" unless connected_device
+            connected_pin = connected_device.find_input_pin(output)
             device.output_pins[i].connect(connected_pin)
           end
         end
@@ -52,9 +51,9 @@ module Reginald
       def build_graph(source_device, sink_device)
         source_pin = source_device.output_pins.first
         sink_pin = sink_device.input_pins.first
-        pins = find_path(source_pin, sink_pin)
-        return nil unless pins
-        Graph.new(self, pins)
+        possible_paths = find_paths(source_pin, sink_pin)
+        return nil if possible_paths.empty?
+        Graph.new(self, possible_paths)
       end
 
       def sources
@@ -71,14 +70,19 @@ module Reginald
 
       private
 
-      def find_path(source_pin, sink_pin)
+      def find_paths(source_pin, sink_pin)
+        results = []
         sink_pin.owner.input_pins.each do |input|
           next unless input.connection
-          return [source_pin, input] if input.connection == source_pin
-          result = find_path(source_pin, input.connection)
-          return result + [input.connection, input] if result
+          results << [source_pin, input] if input.connection == source_pin
+          result = find_paths(source_pin, input.connection)
+          unless result.empty?
+            result.each do |path|
+              results << (path + [input.connection, input])
+            end
+          end
         end
-        nil
+        results
       end
     end
   end
