@@ -16,6 +16,10 @@ module Reginald
           graphs.each(&:start)
           true
         end
+
+        def hidden?
+          output_pins.first.graphs.empty?
+        end
       end
     end
   end
