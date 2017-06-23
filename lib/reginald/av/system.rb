@@ -37,13 +37,12 @@ module Reginald
 
         devices.each_value do |device|
           Array.wrap(device.config['output']).each_with_index do |output, i|
-            if output.is_a?(Hash)
-              connected_device_pin = output['input']
-              output = output['device']
+            unless output.is_a?(Hash)
+              output = { 'device' => output }
             end
-            connected_device = devices[output]
-            raise UnknownDevice, "Could not find device #{output} supposedly connected to #{device.name}" unless connected_device
-            connected_pin = connected_device.find_input_pin(connected_device_pin || 1)
+            connected_device = devices[output['device']]
+            raise UnknownDevice, "Could not find device #{output['device']} supposedly connected to #{device.name}" unless connected_device
+            connected_pin = connected_device.find_input_pin(output)
             device.output_pins[i].connect(connected_pin)
           end
         end

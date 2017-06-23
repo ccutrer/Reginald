@@ -1,0 +1,27 @@
+devices:
+  - type: shairport_sync
+    output:
+      device: virtual_matrix1
+  - type: shairport_sync
+    output:
+      device: virtual_matrix1
+  - type: shairport_sync
+    output:
+      device: virtual_matrix1
+  - type: shairport_sync
+    output:
+      device: virtual_matrix1
+  - type: virtual_matrix
+    output:
+      - device: Kitchen
+        alsa_device: hw:1
+      - device: Bedroom
+        alsa_device: hw:2
+      - device: Deck
+        alsa_device: hw:3
+  - type: generic_speaker
+    name: Kitchen
+  - type: generic_speaker
+    name: Bedroom
+  - type: generic_speaker
+    name: Deck
