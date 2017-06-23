@@ -3,7 +3,6 @@ class Reginald::Av::GraphsController < ApplicationController
     respond_to do |format|
       format.json { render json: system.graphs.map(&:as_json) }
       format.html do
-#        @graphs = system.graphs
         render locals: { graphs: system.graphs }
       end
     end

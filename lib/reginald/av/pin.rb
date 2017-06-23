@@ -1,10 +1,10 @@
 module Reginald
   module AV
     class Pin
-      attr_accessor :owner, :name, :connection, :graphs
+      attr_accessor :owner, :config, :connection, :graphs
 
-      def initialize(owner, name = nil)
-        @owner, @name = owner, name
+      def initialize(owner, config = nil)
+        @owner, @config = owner, config
         @graphs = []
       end
 
@@ -17,7 +17,6 @@ module Reginald
 
       def inspect
         result = "#<#{self.class.name}"
-        result << " name=#{name}" if name
         result << " owner=#{owner.name}"
         result << " connection=#{connection ? connection.owner&.name : 'nil'}"
         result << ">"

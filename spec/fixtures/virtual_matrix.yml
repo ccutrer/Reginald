@@ -22,8 +22,10 @@ devices:
     output:
       - device: monoprice_multizone_amp1
         input: 1
+        alsa_device: hw:1
       - device: monoprice_multizone_amp1
         input: 2
+        alsa_device: hw:2
   - type: monoprice_multizone_amp
     output:
       - device: Kitchen

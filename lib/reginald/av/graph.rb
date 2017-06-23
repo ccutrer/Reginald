@@ -9,7 +9,7 @@ module Reginald
 
       def conflicting_graphs
         conflicts_by_path = possible_paths.map { |path| conflicting_graphs_for(path) }
-        return [] if conflicts_by_path.any?(:empty?)
+        return [] if conflicts_by_path.any?(&:empty?)
         conflicts_by_path.flatten.uniq
       end
 
