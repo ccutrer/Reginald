@@ -10,6 +10,12 @@ class Reginald::Av::ShairportSyncController < ApplicationController
     render text: @device.output_pins.first.connection.config['alsa_device'] || 'OK'
   end
 
+  def destroy
+    @device.output_pins.first.graphs.each(&:stop)
+
+    render text 'OK'
+  end
+
   private
 
   def find_device

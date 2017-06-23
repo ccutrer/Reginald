@@ -44,11 +44,7 @@ class Reginald::Av::GraphsController < ApplicationController
   end
 
   def destroy
-    if params[:source]
-      graphs = system.graphs.select { |g| g.pins.first.owner.name == params[:source] }
-    elsif params[:sink]
-      graphs = system.graphs.select { |g| g.pins.last.owner.name == params[:sink] }
-    end
+    graphs = system.graphs.select { |g| g.active_path.last.owner.name == params[:id] }
     if graphs.empty?
       return respond_to do |format|
         format.json { render json: [], status: 404 }

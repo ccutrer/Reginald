@@ -4,7 +4,7 @@
 
 <ul>
   <% graphs.each do |graph| %>
-    <li><%= graph.pins.first.owner.name %> is playing on <%= graph.pins.last.owner.name %>. <%= link_to "Stop", av_graph_path(graph.pins.last.owner.name), method: :delete %></li>
+    <li><%= graph.active_path.first.owner.name %> is playing on <%= graph.active_path.last.owner.name %>. <%= link_to "Stop", av_graph_path(graph.active_path.last.owner.name), method: :delete %></li>
   <% end %>
 </ul>
 <%= form_tag(:av_graphs, method: :post) do %>
