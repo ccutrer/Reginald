@@ -8,7 +8,7 @@ module Reginald
         end
 
         def start_graphs(system)
-          graphs = config['sinks'].map do |device_name|
+          graphs = Array.wrap(config['sinks']).map do |device_name|
             system.build_graph(self, system.devices[device_name])
           end
 
