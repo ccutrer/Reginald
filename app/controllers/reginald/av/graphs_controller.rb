@@ -22,6 +22,15 @@ class Reginald::Av::GraphsController < ApplicationController
     end
 
     graph = system.build_graph(source, sink)
+
+    # this combo is already playing
+    if graph.active_path
+      return respond_to do |format|
+        format.json { render json: graph.as_json, status: 200 }
+        format.html { redirect_to :av_graphs }
+      end
+    end
+
     unless params[:interrupt]
       conflicts = graph.conflicting_graphs
       unless conflicts.empty?

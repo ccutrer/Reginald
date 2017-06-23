@@ -51,6 +51,9 @@ module Reginald
       def build_graph(source_device, sink_device)
         source_pin = source_device.output_pins.first
         sink_pin = sink_device.input_pins.first
+        if (existing_graph = (sink_pin.graphs & source_pin.graphs).first)
+          return existing_graph
+        end
         possible_paths = find_paths(source_pin, sink_pin)
         return nil if possible_paths.empty?
         Graph.new(self, possible_paths)

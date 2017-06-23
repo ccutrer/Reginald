@@ -70,6 +70,14 @@ module Reginald::AV
                                      shairport.output_pins.first,
                                      speakers.input_pins.first
                                  ]
+
+        # if we start it playing, and then build it again, it
+        # should give us back the original graph object
+        graph.start
+        graph2 = system.build_graph(shairport, speakers)
+        expect(graph).to eql graph2
+        graph2.start
+        expect(system.graphs.length).to eq 1
       end
 
       it "builds a two step graph" do

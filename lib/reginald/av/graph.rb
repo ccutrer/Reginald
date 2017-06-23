@@ -14,6 +14,8 @@ module Reginald
       end
 
       def start(interrupt: false)
+        return if active_path
+
         conflicting_graphs = nil
         chosen_path = nil
         possible_paths.each do |path|
