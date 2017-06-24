@@ -27,6 +27,9 @@ module Reginald
 
         def stop
           @user_agent = nil
+          @artist = nil
+          @album = nil
+          @track = nil
           output_pins.first.graphs.dup.each(&:stop)
         end
 
@@ -44,7 +47,6 @@ module Reginald
           @volume = volume
           graphs = output_pins.first.graphs
           # mute
-          puts "setting volume to #{volume} on #{graphs.length} graphs"
           if volume == -144.0
             graphs.each { |g| g.volume_pin&.mute! }
           elsif graphs.length == 1
@@ -86,6 +88,21 @@ module Reginald
               end
 
               case type
+              when 'core'
+                case code
+                when 'asal'
+                  system.synchronize do
+                    @album = data
+                  end
+                when 'asar'
+                  system.synchronize do
+                    @artist = data
+                  end
+                when 'minm'
+                  system.synchronize do
+                    @track = data
+                  end
+                end
               when 'ssnc'
                 case code
                 when 'snua'

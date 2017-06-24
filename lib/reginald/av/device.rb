@@ -34,8 +34,19 @@ module Reginald
     end
 
     class Source < Device
+      attr_reader :artist, :album, :track
       def display_name
         name
+      end
+
+      def description
+        if track
+          result = track.dup
+          result << " - #{artist}" if artist
+          result << " (#{album})" if album
+          return result
+        end
+        display_name
       end
 
       def hidden?

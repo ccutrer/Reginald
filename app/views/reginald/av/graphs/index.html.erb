@@ -4,7 +4,10 @@
 
 <ul>
   <% graphs.each do |graph| %>
-    <li><%= graph.active_path.first.owner.display_name %> is playing on <%= graph.active_path.last.owner.name %>. <%= link_to "Stop", av_graph_path(graph.active_path.last.owner.name), method: :delete %></li>
+    <li><%= graph.active_path.first.owner.description %> is playing on
+      <%= graph.active_path.last.owner.name %>
+      <%= " (#{graph.volume_pin.volume}#{graph.volume_pin.volume_units})" if graph.volume_pin %>.
+      <%= link_to "Stop", av_graph_path(graph.active_path.last.owner.name), method: :delete %></li>
   <% end %>
 </ul>
 <%= form_tag(:av_graphs, method: :post) do %>

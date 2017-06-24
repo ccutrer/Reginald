@@ -74,7 +74,19 @@ module Reginald::AV
           @output_pins << OutputPin.new(self)
         end
 
-        poll_status if @serial_port
+        if @serial_port
+          # populate the base status
+          poll_status
+          Thread.new do
+            loop do
+              sleep 0.5
+              # TODO: this isn't very efficient
+              system.synchronize do
+                poll_status
+              end
+            end
+          end
+        end
       end
 
       def switch_input(output_pin, to: )
