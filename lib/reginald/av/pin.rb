@@ -15,6 +15,10 @@ module Reginald
         other_pin.connection = self
       end
 
+      def stop(graph)
+        graphs.delete(graph)
+      end
+
       def inspect
         result = "#<#{self.class.name}"
         result << " owner=#{owner.name}"

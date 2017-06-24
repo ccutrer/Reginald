@@ -28,6 +28,11 @@ module Reginald::AV
           result << ">"
           result
         end
+
+        def stop(graph)
+          super
+          owner.send(:set, self, :power, false)
+        end
       end
 
       attr_reader :stack_size
