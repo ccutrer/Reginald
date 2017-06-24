@@ -12,7 +12,7 @@ class Reginald::Av::ShairportSyncController < ApplicationController
   end
 
   def destroy
-    @device.output_pins.first.graphs.dup.each(&:stop)
+    @device.stop
 
     render plain: 'OK'
   end

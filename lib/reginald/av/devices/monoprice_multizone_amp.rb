@@ -31,7 +31,7 @@ module Reginald::AV
 
         def stop(graph)
           super
-          owner.send(:set, self, :power, false)
+          owner.send(:set, self, :power, false) if graphs.empty?
         end
       end
 

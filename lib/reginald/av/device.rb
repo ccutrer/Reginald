@@ -34,6 +34,10 @@ module Reginald
     end
 
     class Source < Device
+      def display_name
+        name
+      end
+
       def hidden?
         false
       end
