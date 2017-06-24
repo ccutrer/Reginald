@@ -16,8 +16,9 @@ Gem::Specification.new do |s|
   s.add_dependency "actionpack", "~> 5.1"
   s.add_dependency "actionview", "~> 5.1"
   s.add_dependency "activesupport", "~> 5.1"
-  s.add_dependency "railties", "~> 5.1"
   s.add_dependency "puma", "~> 3.7"
+  s.add_dependency "railties", "~> 5.1"
+  s.add_dependency "rubyserial", "~> 0.4"
   s.add_dependency "sprockets-rails", "~> 3.2"
 
   s.add_development_dependency "byebug", "~> 9"
