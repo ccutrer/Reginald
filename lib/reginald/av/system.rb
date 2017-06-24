@@ -1,19 +1,20 @@
 require 'active_support'
 require 'active_support/core_ext/array/wrap'
+require 'active_support/core_ext/module/delegation'
 
 module Reginald
   module AV
     class System
       attr_reader :devices, :graphs
+      delegate :synchronize, to: :mutex
 
       class << self
         def assign_instance(instance)
           @instance = instance
-          @mutex = Mutex.new
         end
 
         def with_singleton
-          @mutex.synchronize do
+          @instance.synchronize do
             yield(@instance)
           end
         end
@@ -22,12 +23,13 @@ module Reginald
       def initialize(config)
         @devices = {}
         @graphs = []
+        @mutex = Mutex.new
 
         config['devices'].each do |device_config|
           type = device_config['type']
           require "reginald/av/devices/#{type}"
           klass = Reginald::AV::Devices.const_get(ActiveSupport::Inflector.classify(type), false)
-          device = klass.new(device_config)
+          device = klass.new(self, device_config)
           unless device.name
             count = devices.count { |_name, device| device.class == klass } + 1
             device.name = "#{type}#{count}"
@@ -72,6 +74,10 @@ module Reginald
       end
 
       private
+
+      def mutex
+        @mutex
+      end
 
       def find_paths(source_pin, sink_pin)
         results = []

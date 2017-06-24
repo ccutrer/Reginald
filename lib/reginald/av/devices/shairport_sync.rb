@@ -5,7 +5,7 @@ module Reginald
   module AV
     module Devices
       class ShairportSync < Source
-        def initialize(config)
+        def initialize(system, config)
           super
           @output_pins = [Pin.new(self)]
           if config['metadata_pipe_name']
@@ -70,7 +70,9 @@ module Reginald
               when 'ssnc'
                 case code
                 when 'snua'
-                  @user_agent ||= data.sub(%r{/.*}, '')
+                  system.synchronize do
+                    @user_agent ||= data.sub(%r{/.*}, '')
+                  end
                 end
               end
             end

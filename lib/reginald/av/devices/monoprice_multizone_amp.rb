@@ -37,7 +37,7 @@ module Reginald::AV
 
       attr_reader :stack_size
 
-      def initialize(config)
+      def initialize(system, config)
         super
         @input_pins = (1..6).map { Pin.new(self) }
 

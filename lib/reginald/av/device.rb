@@ -1,11 +1,11 @@
 module Reginald
   module AV
     class Device
-      attr_reader :config, :input_pins, :output_pins
+      attr_reader :system, :config, :input_pins, :output_pins
       attr_accessor :name
 
-      def initialize(config)
-        @config = config
+      def initialize(system, config)
+        @system, @config = system, config
         @name = config['name']
         @input_pins = []
         @output_pins = []

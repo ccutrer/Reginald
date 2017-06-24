@@ -2,7 +2,7 @@ module Reginald::AV
   module Devices
     class VirtualMatrix < Device
 
-      def initialize(config)
+      def initialize(system, config)
         super
 
         @output_pins = config['output'].map do |output_pin_config|
