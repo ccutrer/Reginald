@@ -21,6 +21,7 @@ module Reginald
 
           return false if graphs.any? { |graph| !graph.conflicting_graphs.empty? }
           graphs.each(&:start)
+          set_volume(@volume) if @volume
           true
         end
 
@@ -38,6 +39,24 @@ module Reginald
         end
 
         private
+
+        def set_volume(volume)
+          @volume = volume
+          graphs = output_pins.first.graphs
+          # mute
+          puts "setting volume to #{volume} on #{graphs.length} graphs"
+          if volume == -144.0
+            graphs.each { |g| g.volume_pin&.mute! }
+          elsif graphs.length == 1
+            volume_pin = graphs.first.volume_pin
+            return unless volume_pin
+
+            volume_pin.unmute!
+            volume_pin.volume = System.scale_volume(volume, -30.0, 0.0, volume_pin.min_volume, volume_pin.max_volume)
+          else
+            # figure out how to scale multiple active zones like iTunes does
+          end
+        end
 
         def metadata_thread
           loop do
@@ -72,6 +91,11 @@ module Reginald
                 when 'snua'
                   system.synchronize do
                     @user_agent ||= data.sub(%r{/.*}, '')
+                  end
+                when 'pvol'
+                  system.synchronize do
+                    volume = data.split(',').first.to_f
+                    set_volume(volume)
                   end
                 end
               end

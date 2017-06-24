@@ -45,6 +45,10 @@ module Reginald
         @active_path = nil
       end
 
+      def volume_pin
+        active_path.reverse.find { |pin| pin.respond_to?(:volume=) }
+      end
+
       private
 
       def conflicting_graphs_for(path)

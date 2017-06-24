@@ -18,6 +18,10 @@ module Reginald
             yield(@instance)
           end
         end
+
+        def scale_volume(value, value_minimum, value_maximum, scaled_minimum, scaled_maximum)
+          (value.to_f - value_minimum)/(value_maximum - value_minimum) * (scaled_maximum - scaled_minimum) + scaled_minimum
+        end
       end
 
       def initialize(config)

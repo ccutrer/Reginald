@@ -33,6 +33,19 @@ module Reginald::AV
           super
           owner.send(:set, self, :power, false) if graphs.empty?
         end
+
+        def min_volume; 0.0; end
+        def max_volume; 38.0; end
+        def volume_units; ''; end
+        def volume=(value)
+          owner.send(:set, self, :volume, value.round)
+        end
+        def mute!
+          owner.send(:set, self, :mute, true)
+        end
+        def unmute!
+          owner.send(:set, self, :mute, false)
+        end
       end
 
       attr_reader :stack_size
