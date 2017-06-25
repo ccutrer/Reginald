@@ -12,7 +12,7 @@ module Reginald::AV
 
       # dynamically create new pins as devices are connected
       def find_input_pin(pin_config)
-        new_pin = Pin.new(self, pin_config)
+        new_pin = Pin.new(self)
         @input_pins << new_pin
         new_pin
       end

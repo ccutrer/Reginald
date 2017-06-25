@@ -50,6 +50,7 @@ module Reginald
             raise UnknownDevice, "Could not find device #{output['device']} supposedly connected to #{device.name}" unless connected_device
             connected_pin = connected_device.find_input_pin(output)
             device.output_pins[i].connect(connected_pin)
+            device.output_pins[i].config = output
           end
         end
       end

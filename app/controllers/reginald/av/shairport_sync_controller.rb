@@ -7,8 +7,15 @@ class Reginald::Av::ShairportSyncController < ApplicationController
     return render plain: "Instance Busy", status: 400 unless @device.output_pins.first.graphs.empty?
 
     return render plain: "Conflict occurred", status: 503 unless @device.start_graphs(system)
-    # need to tell Shairport Sync which device it connected to if necessary
-    render plain: @device.output_pins.first.connection&.config&.[]('alsa_device') || 'OK'
+
+    result = 'OK'
+    # if we're connected to a virtual matrix, we need to tell Shairport Sync which
+    # device we ended up connected to
+    pins = @device.output_pins.first.graphs.first&.active_path
+    if pins.present? && pins[2].owner.is_a?(Reginald::AV::Devices::VirtualMatrix)
+      result = pins[2].config['alsa_device'] || 'OK'
+    end
+    render plain: result
   end
 
   def destroy

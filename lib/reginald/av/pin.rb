@@ -23,6 +23,7 @@ module Reginald
         result = "#<#{self.class.name}"
         result << " owner=#{owner.name}"
         result << " connection=#{connection ? connection.owner&.name : 'nil'}"
+        result << " config=#{config.inspect}"
         result << ">"
         result
       end

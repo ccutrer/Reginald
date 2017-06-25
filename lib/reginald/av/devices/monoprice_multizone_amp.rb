@@ -140,6 +140,8 @@ module Reginald::AV
       private_constant :COMMANDS
 
       def set(output_pin, name, value)
+        return unless @serial_port
+
         protocol_value = case name
         when :pa, :power, :mute, :do_not_disturb
           value ? 1 : 0
