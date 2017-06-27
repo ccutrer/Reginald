@@ -1,0 +1,32 @@
+[Unit]
+Description=Reginald Home Automation Controller
+After=network.target
+
+[Service]
+# Foreground process (do not use --daemon in ExecStart or config.rb)
+Type=simple
+
+# Preferably configure a non-privileged user
+User=reginald
+
+# Specify the path to your puma application root
+WorkingDirectory=/home/reginald/src/reginald
+
+# Helpful for debugging socket activation, etc.
+# Environment=PUMA_DEBUG=1
+
+# The command to start Puma
+# Here we are using a binstub generated via:
+# `bundle binstubs puma --path ./bin`
+# in the WorkingDirectory (replace <WD> below)
+# You can alternatively use `bundle exec --keep-file-descriptors puma`
+ExecStart=/home/reginald/src/reginald/bin/puma -b tcp://0.0.0.0:9292
+
+# Alternatively with a config file (in WorkingDirectory) and
+# comparable `bind` directives
+# ExecStart=<WD>/sbin/puma -C config.rb
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
