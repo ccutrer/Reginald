@@ -160,8 +160,8 @@ module Reginald::AV
       end
 
       def zone_id(output_pin)
-        output_index = output_pins.index(output_pin) + 1
-        (output_index / 6 + 1) * 10 + output_index % 6
+        output_index = output_pins.index(output_pin)
+        (output_index / 6 + 1) * 10 + output_index % 6 + 1
       end
     end
   end
