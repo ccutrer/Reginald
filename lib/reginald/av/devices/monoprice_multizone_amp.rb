@@ -56,6 +56,10 @@ module Reginald::AV
 
         if config['serial_port']
           @serial_port = Serial.new(config['serial_port'])
+          # clear out any pending command
+          @serial_port.write("\r\n")
+          # chew up any pending input
+          while (@serial_port.getbyte); end
 
           if check_stack_size(3)
             @stack_size = 3
@@ -140,6 +144,7 @@ module Reginald::AV
       private_constant :COMMANDS
 
       def set(output_pin, name, value)
+        output_pin.instance_variable_set("@#{name}", value) unless name == :channel
         return unless @serial_port
 
         protocol_value = case name
@@ -152,7 +157,6 @@ module Reginald::AV
         end
         @serial_port.write("<%02d%s%02d\r\n" % [zone_id(output_pin), COMMANDS[name], protocol_value])
         @serial_port.gets
-        output_pin.instance_variable_set("@#{name}", value) unless name == :channel
       end
 
       def zone_id(output_pin)
