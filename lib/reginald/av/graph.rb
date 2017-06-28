@@ -28,11 +28,11 @@ module Reginald
         conflicting_graphs.each(&:stop)
         @active_path = chosen_path
         @system.graphs << self
-        active_path.first.graphs << self
+        active_path.first.start(self)
         active_path[1...-1].each_slice(2) do |(input, output)|
           input.owner.switch_input(output, to: input)
-          input.graphs << self
-          output.graphs << self
+          input.start(self)
+          output.start(self)
         end
         active_path.last.graphs << self
       end

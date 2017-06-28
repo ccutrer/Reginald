@@ -15,6 +15,10 @@ module Reginald
         other_pin.connection = self
       end
 
+      def start(graph)
+        graphs << graph
+      end
+
       def stop(graph)
         graphs.delete(graph)
       end

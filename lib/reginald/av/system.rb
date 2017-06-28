@@ -20,6 +20,9 @@ module Reginald
         end
 
         def scale_volume(value, value_minimum, value_maximum, scaled_minimum, scaled_maximum)
+          # bounds checking; due to volume multipliers we may request something outside our scale
+          return scaled_maximum if value > value_maximum
+          return scaled_minimum if value < value_minimum
           (value.to_f - value_minimum)/(value_maximum - value_minimum) * (scaled_maximum - scaled_minimum) + scaled_minimum
         end
       end
