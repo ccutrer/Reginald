@@ -80,7 +80,7 @@ module Reginald
 
         def set_volume(volume)
           if @volume.nil?
-            output_pins.first.graphs.each do
+            output_pins.first.graphs.each do |graph|
               add_graph(graph)
             end
           end
@@ -164,6 +164,9 @@ module Reginald
               end
             end
           end
+        rescue
+          puts $!.inspect
+          puts $!.backtrace
         end
       end
     end

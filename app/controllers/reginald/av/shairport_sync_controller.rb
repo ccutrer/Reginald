@@ -12,7 +12,9 @@ class Reginald::Av::ShairportSyncController < ApplicationController
     # if we're connected to a virtual matrix, we need to tell Shairport Sync which
     # device we ended up connected to
     pins = @device.output_pins.first.graphs.first&.active_path
-    if pins.present? && pins[2].owner.is_a?(Reginald::AV::Devices::VirtualMatrix)
+    if pins.present? &&
+        defined?(Reginald::AV::Devices::VirtualMatrix) &&
+        pins[2].owner.is_a?(Reginald::AV::Devices::VirtualMatrix)
       result = pins[2].config['alsa_device'] || 'OK'
     end
     render plain: result
