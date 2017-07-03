@@ -31,6 +31,12 @@ module Reginald
           input_pins.first
         end
       end
+
+      def find_output_pin(index, pin_config)
+        pin = output_pins[index]
+        pin.config = pin_config
+        pin
+      end
     end
 
     class Source < Device

@@ -12,6 +12,8 @@ devices:
       - pioneer_receiver1
       - Deck
   - type: pioneer_receiver
+    zones:
+      - 2
     output:
       - Living Room
       - Kitchen

@@ -3,9 +3,13 @@ module Reginald
     class Pin
       attr_accessor :owner, :config, :connection, :graphs
 
-      def initialize(owner, config = nil)
+      def initialize(owner, config = {})
         @owner, @config = owner, config
         @graphs = []
+      end
+
+      def name
+        config['name']
       end
 
       def connect(other_pin)
