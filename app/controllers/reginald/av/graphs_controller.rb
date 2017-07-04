@@ -1,9 +1,10 @@
 class Reginald::Av::GraphsController < ApplicationController
   def index
+    graphs = system.graphs.sort_by { |g| g.active_path.last.owner.name }
     respond_to do |format|
-      format.json { render json: system.graphs.map(&:as_json) }
+      format.json { render json: graphs.map(&:as_json) }
       format.html do
-        render locals: { graphs: system.graphs }
+        render locals: { graphs: graphs }
       end
     end
   end
