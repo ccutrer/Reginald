@@ -103,6 +103,20 @@ module Reginald::AV
           end
         end
 
+        def stop(graph)
+          super
+          if graphs.empty?
+            case zone
+            when 1
+              owner.send(:send_command, "PWR00")
+            when 2
+              owner.send(:send_command, "ZPW00")
+            when 3
+              owner.send(:send_command, "PW300")
+            end
+          end
+        end
+
         private
 
         def poll_status

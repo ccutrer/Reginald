@@ -100,16 +100,32 @@ module Reginald::AV
         def unmute!
           if @mute
             case zone
-              when 1
-                telnet.write("MF\r")
-              when 2
-                telnet.write("Z2MF\r")
-              when 3
-                telnet.write("Z3MF\r")
-              when :hdzone
-                telnet.write("HZMF\r")
+            when 1
+              telnet.write("MF\r")
+            when 2
+              telnet.write("Z2MF\r")
+            when 3
+              telnet.write("Z3MF\r")
+            when :hdzone
+              telnet.write("HZMF\r")
             end
             @mute = false
+          end
+        end
+
+        def stop(graph)
+          super
+          if graphs.empty?
+            case zone
+            when 1
+              telnet.write("PF\r")
+            when 2
+              telnet.write("APF\r")
+            when 3
+              telnet.write("BPF\r")
+            when :hdzone
+              telnet.write("ZEF\r")
+            end
           end
         end
 
