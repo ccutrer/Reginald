@@ -1,3 +1,4 @@
+require 'rubyserial'
 require 'socket'
 
 module Reginald::AV
@@ -67,8 +68,13 @@ module Reginald::AV
         def volume=(value)
           case zone
             when 1
-              @volume = (value * 2).round.to_f / 2
-              telnet.write("%03dVL\r" % [(@volume + 80.5) * 2.to_i])
+              if owner.config['volume_step'] == 1.0
+                @volume = value.round.to_f
+                telnet.write("%02dVL\r" % [(@volume + 81).to_i])
+              else
+                @volume = (value * 2).round.to_f / 2
+                telnet.write("%03dVL\r" % [(@volume + 80.5) * 2.to_i])
+              end
             when 2
               @volume = value.round
               telnet.write("%02dZV\r" % [@volume + 81])
@@ -197,6 +203,14 @@ module Reginald::AV
 
         if config['host']
           @telnet = TCPSocket.new(config['host'], 23)
+          @wait_io = @telnet
+        elsif config['serial_port']
+          @telnet = Serial.new(config['serial_port'])
+          # yes, this is terrible, but I want to `select` on this, so need
+          # a true FD. I could use File.open, but then I would need to
+          # tcsetattr the serial port settings, which would take work that
+          # the RubySerial library does
+          @wait_io = IO.new(@telnet.instance_variable_get(:@fd))
         end
 
         # I _could_ detect these with the speaker system configuration,
@@ -219,13 +233,17 @@ module Reginald::AV
         end
 
         if @telnet
-          # interrogate the input names
-          input_pins.length.times do |i|
-            @telnet.write("?RGB%02d\r" % i)
-          end
-          # populate the initial status
-          output_pins.each do |pin|
-            pin.send(:poll_status)
+          # only ask for the status if IP; serial would wake the
+          # receiver up if it's not on
+          unless config['serial_port']
+            # interrogate the input names
+            input_pins.length.times do |i|
+              @telnet.write("?RGB%02d\r" % i)
+            end
+            # populate the initial status
+            output_pins.each do |pin|
+              pin.send(:poll_status)
+            end
           end
           # read all pending messages
           while poll_status(timeout: 0.0); end
@@ -385,13 +403,22 @@ module Reginald::AV
       end
 
       def poll_status(timeout: nil)
-        return false unless IO.select([@telnet], nil, nil, timeout)
+        return false unless IO.select([@wait_io], nil, nil, timeout)
+        # when using serial, we'll probably end up reading one character at a time,
+        # because we can read faster than
+#        @line ||= ''
         line = @telnet.gets.strip
+#        return unless @line.end_with?("\r\n")
+#        line = @line.strip
+#        @line = ''
         puts "Received '#{line}' from #{name}"
         system.synchronize do
           case line
             when /^PWR([01])$/
               output_pins[0].power = $1 == '0'
+            # older receivers use two digit volume, without half steps
+            when /^VOL(\d{2})$/
+              output_pins[0].instance_variable_set(:@volume, $1.to_f - 81)
             when /^VOL(\d{3})$/
               output_pins[0].instance_variable_set(:@volume, $1.to_f / 2 - 80.5)
             when /^MUT([01])$/
