@@ -38,7 +38,7 @@ module Reginald
       end
 
       def stop
-        active_path.each do |pin|
+        active_path.reverse.each do |pin|
           pin.stop(self)
         end
         @system.graphs.delete(self)
